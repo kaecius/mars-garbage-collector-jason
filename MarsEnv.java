@@ -17,7 +17,7 @@ public class MarsEnv extends Environment {
 
     public static final Term    ns = Literal.parseLiteral("next(slot)");
 	public static final Term    nsc = Literal.parseLiteral("nextContinous(slot)");
-	public static final Term    ntdc = Literal.parseLiteral("nextTopDownContinous(slot)");
+	public static final Term    nrdm = Literal.parseLiteral("nextRandom(slot)");
     public static final Term    pg = Literal.parseLiteral("pick(garb)");
     public static final Term    dg = Literal.parseLiteral("drop(garb)");
     public static final Term    bg = Literal.parseLiteral("burn(garb)");
@@ -57,8 +57,10 @@ public class MarsEnv extends Environment {
                 model.burnGarb();
             } else if (action.equals(nsc)){
 				model.nextSlotContinous();
-			} else if (action.equals(ntdc)){
-			    model.nextSlotTopDownContinous();
+			/*} else if (action.equals(ntdc)){
+			    model.nextSlotTopDownContinous();*/
+			} else if (action.equals(nrdm)){
+				model.nextRandom();
 			} else {
                 return false;
             }
@@ -196,6 +198,65 @@ public class MarsEnv extends Environment {
 			setAgPos(2, getAgPos(2)); // just to draw it in the view
         }
 		
+		void nextRandom() throws Exception {
+			Location r3 = getAgPos(2);
+			
+			int rDir = random.nextInt(8);
+			System.out.println(rDir);
+			switch(rDir){
+				case 0: //TL
+					if ( r3.x != 0 && r3.y != 0 ){
+						r3.x--;
+						r3.y--;
+					}
+				break;
+				case 1: // T
+					if(r3.y != 0 ){
+						r3.y--;
+					}
+				break; 
+				case 2: // TR
+					if(r3.x != getWidth()-1 && r3.y != 0){
+						r3.x++;
+						r3.y--;
+					}
+				break; 
+				case 3: // R
+					if(r3.x != getWidth()-1 ){
+						r3.x++;
+					}
+				break;
+				case 4: // DR
+					if(r3.x != getWidth()-1 && r3.y != getHeight()-1){
+						r3.x++;
+						r3.y++;
+					}
+				break;
+				case 5: // D
+					if(r3.y != getHeight()-1 ){
+						r3.y++;
+					}
+				break;
+				case 6: // DL
+					if(r3.x != 0 && r3.y != getHeight()-1){
+						r3.x--;
+						r3.y++;
+					}
+				break;
+				case 7: // L
+					if(r3.x != 0 ){
+						r3.x--;
+					}
+				break;
+			}
+			
+			dropNewGarb();
+			
+			setAgPos(2, r3);
+            setAgPos(0, getAgPos(0)); // just to draw it in the view
+			setAgPos(1, getAgPos(1)); // just to draw it in the view
+		}
+		
 		void nextSlotTopDownContinous() throws Exception { //R3
             Location r3 = getAgPos(2);
 			
@@ -219,7 +280,7 @@ public class MarsEnv extends Environment {
 				return;
             }
 			
-			dropNewGarb();
+			//dropNewGarb();
 			
             setAgPos(2, r3);
             setAgPos(0, getAgPos(0)); // just to draw it in the view
