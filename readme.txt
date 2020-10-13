@@ -74,19 +74,24 @@ We change the "check" plan, that will move the agent to the next position whenev
 
 4) Include a new crazy Robot r3 that moves and produces garbage randomly.
 First of all we defined the new r3 agent in the "mars.mas2j" file.
-After that, we created the "r3.asl" folder, where we defined the plans for the agent, and his "believe" aswell:
+After that, we created the "r3.asl" folder, where we defined the plans for the agent, and his "belief" aswell:
 
 at(P) :- pos(P,X,Y) & pos(r3,X,Y).
 
 !check(slots).
 
 +!check(slots) : true
-   <- nextTopDownContinous(slot);
+   <- nextRandom(slot);
       !check(slots).
 +!check(slots).
 
-This agent moves from top to down (continously) by default.
+This agent moves randomly by default.
 
-After that, we defined 
-In "MarsEnv.java":
-First of all we defined th
+After that, we throw ourselves to the "MarsEnv.java" file:
+	1- We set the initial position of the agent as random in the constructor method of the class "MarsModel"
+		setAgPos(2, getFreePos());
+	2- We defined the method "nextRandom()" which moves the agent to a random possition and drops garbage in that new position.
+
+
+5) Include a new task at your choice.
+
