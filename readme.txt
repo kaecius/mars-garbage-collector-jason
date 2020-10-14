@@ -23,7 +23,7 @@ R2 agents could fail up to 3 times when trying to pick the garbage that r1 left 
 In "MarsEnv.java":
 We define the variable "berr", that stores the number of tries of burning garb made by the incinerator, and we initialize the variable BErr to 2, that sets the maximum error that the incinerator can make. Then, we redefined the function "burnGarb()", in such a way that it would burn the garbage based on a random Boolean, or if the tries that he made were maximum (berr == BErr); if those conditions are not filled, the incinerator would fail the burning, increasing the berr variable by 1.
 
-Ending up like this: (esto no se si tenemos que ponerlo)
+Ending up like this:
 void burnGarb() {
             // r2 location has garbage
             if (model.hasObject(GARB, getAgPos(1))) {
@@ -61,7 +61,7 @@ We change the "check" plan, that will move the agent to the next position whenev
 
 b) Scanning continuously.
 
-The function "nextSlotTopDownContinously()" will behave like the "nextSlotTopDown()" function,  in contrast, this will work in the same way until it arrives to the last position (last row, last column), that it will change the position of the agent r1 to the first position of the grid (first row, first column).
+The function "nextSlotTopDownContinously()" will behave like the "nextSlotTopDown()" function,  in contrast, this will work in the same way until it arrives to the last position (last row, last column), reverse the direction of the agent r1.
 
 In "r1.asl":
 We change the "check" plan, that will move the agent to the next position whenever there's no garbage in r1's position, in this case the next position will be set by the "nextSlotTopDownContinously()" function.
@@ -90,8 +90,37 @@ This agent moves randomly by default.
 After that, we throw ourselves to the "MarsEnv.java" file:
 	1- We set the initial position of the agent as random in the constructor method of the class "MarsModel"
 		setAgPos(2, getFreePos());
-	2- We defined the method "nextRandom()" which moves the agent to a random possition and drops garbage in that new position.
+	2- We defined the method "nextRandom()" which moves the agent to a random possition.
+	3- We defined the agent ".asl" like this:
+	
+	!check(slots).
+
+	+!check(slots) : true
+	   <- nextRandom(slot);
+		  dropNewGarb(slot);
+	      !check(slots).
+	+!check(slots).
+	
+	Which will make call to that "nextRandom" function continously, and to the function "dropNewGarb" aswell (defined in "MarsEnv.java"), 
+	that will drop garbage based on a probability of 10%.
 
 
 5) Include a new task at your choice.
+This new task will include several changes:
+	- r1 agent will have a battery, with a starting value
+	- there's a new r4 agent that will be the charging station
+	- when r1 runs out of battery he will move the charging station, where he will charge his battery to the 100%
+	- the battery level will decharge everytime he moves withouth garbage
+	
+In "MarsEnv.jav	a":
+R4 agent is starting in a random location: setAgPos(3, getFreePos());
 
+"r4.asl" is empty by now.
+
+In "r1.asl":
+	- we added the initial belief: battery(10)
+	- the "check(slot)" plan will now reduce battery each time this plan is executed, and it won't be executed unless the belief "charge" is not in
+	- we defined the plan "+battery(0)", which will activate whenever the battery is 0. Then it will remove all intentions remaining and will remove 
+	  all the "at(_)" beliefs and all "pos(last,X,Y)" beliefs. Finally, it will activate the plan "!goToChargeStation(charge)".
+	- this "!goToChargeStation(charge)" plan will move the r1 agent to the charging station where it will charge until if full, meanwhile this plan
+	  will activate the belief "charge". When it finish the charging, it will move back to the original position, reactivating the plan "check(slot)"
