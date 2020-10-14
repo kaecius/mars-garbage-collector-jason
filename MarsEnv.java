@@ -50,8 +50,8 @@ public class MarsEnv extends Environment {
                 int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
                 model.moveTowards(x,y);
-            } else if (action.getFunctor().equals("batteryEmpty")){
-				System.out.println((int)((NumberTerm)action.getTerm(0)).solve());
+            } else if (action.getFunctor().equals("showBattery")){
+				model.showBattery((int)((NumberTerm)action.getTerm(0)).solve());
 			}else if (action.equals(pg)) {
                 model.pickGarb();
             } else if (action.equals(dg)) {
@@ -124,6 +124,10 @@ public class MarsEnv extends Environment {
 		boolean dirT = false; // down direction
 		int r1Score = 0;
         Random random = new Random(System.currentTimeMillis());
+		
+		int batteryLevel = 0;
+		boolean showBattery = false;
+		
 
         private MarsModel() {
             super(GSize, GSize, 4);
@@ -359,6 +363,11 @@ public class MarsEnv extends Environment {
 				}
 			}
 		}
+		
+		void showBattery(int battery){
+			batteryLevel = battery;
+			showBattery = true;
+		}
     }
 	
 
@@ -392,7 +401,15 @@ public class MarsEnv extends Environment {
                 if (((MarsModel)model).r1HasGarb) {
                     label += " - G";
                     c = Color.orange;
-                }
+                }else if(((MarsModel)model).showBattery) {
+					int batteryLevel = ((MarsModel)model).batteryLevel;
+					label += "-" + Integer.toString(batteryLevel) + "%";
+					if(batteryLevel < 20){
+						c = Color.red;
+					}else if(batteryLevel < 50){
+						c = Color.orange;
+					}
+				}
             }
 			if (id == 2) {
 				c = Color.green;

@@ -15,6 +15,7 @@ battery(10).
 +!check(slots) : not garbage(r1) & battery(S) & S > 0 & not charge
    <- nextContinous(slot);
    	  -+battery(S-1);
+	  showBattery(S-1);
       !check(slots).
 +!check(slots) : battery(S) & S == 0 & not charge.
 +!check(slots).
@@ -42,6 +43,7 @@ battery(10).
 	  
 +!charging(r): battery(S) & S < 100 & charge
 	<- -+battery(S+1);
+		showBattery(S+1);
 		.wait(100);
 		!charging(r).
 	
