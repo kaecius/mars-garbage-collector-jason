@@ -37,7 +37,7 @@ void burnGarb() {
         }
 
 In "r2.asl":
-We defined the new behaviour of r2 in this way, in which the agent will recursivelly activate the !ensure_burn(S) -------  until the call to the burn(garb) function actually burns the garbage.
+We defined the new behaviour of r2 in this way, in which the agent will recursivelly activate the "!ensure_burn(S)" plan until the call to the burn(garb) function actually burns the garbage.
 
 +garbage(r2) : true <- !ensure_burn(r2).
 
@@ -61,7 +61,7 @@ We change the "check" plan, that will move the agent to the next position whenev
 
 b) Scanning continuously.
 
-The function "nextSlotTopDownContinously()" will behave like the "nextSlotTopDown()" function,  in contrast, this will work in the same way until it arrives to the last position (last row, last column), reverse the direction of the agent r1.
+The function "nextSlotTopDownContinously()" will behave like the "nextSlotTopDown()" function,  in contrast, everytime it arrives to the last row it will move to the first row of the next column, until it arrives to the last position (last row, last column), reverse the direction of the agent r1.
 
 In "r1.asl":
 We change the "check" plan, that will move the agent to the next position whenever there's no garbage in r1's position, in this case the next position will be set by the "nextSlotTopDownContinously()" function.
@@ -102,7 +102,7 @@ After that, we throw ourselves to the "MarsEnv.java" file:
 	+!check(slots).
 	
 	Which will make call to that "nextRandom" function continously, and to the function "dropNewGarb" aswell (defined in "MarsEnv.java"), 
-	that will drop garbage based on a probability of 10%.
+	that will drop garbage based on a probability of 5%.
 
 
 5) Include a new task at your choice.
