@@ -46,6 +46,8 @@ public class MarsEnv extends Environment {
         try {
             if (action.equals(ns)) {
                 model.nextSlot();
+				// Task 3 - 
+				//model.nextSlotTopDownContinous();
             } else if (action.getFunctor().equals("move_towards")) {
                 int x = (int)((NumberTerm)action.getTerm(0)).solve();
                 int y = (int)((NumberTerm)action.getTerm(1)).solve();
@@ -59,7 +61,8 @@ public class MarsEnv extends Environment {
             } else if (action.equals(bg)) {
                 model.burnGarb();
             } else if (action.equals(nsc)){
-				model.nextSlotContinous();
+				//model.nextSlotContinous();
+				model.nextSlotTopDownContinous();
 			/*} else if (action.equals(ntdc)){
 			    model.nextSlotTopDownContinous();*/
 			} else if (action.equals(nrdm)){
@@ -276,32 +279,32 @@ public class MarsEnv extends Environment {
 		}
 		
 		void nextSlotTopDownContinous() throws Exception { //R3
-            Location r3 = getAgPos(2);
+            Location r1 = getAgPos(0);
 			
 			if(!dirT){
-				r3.y++;
-				if (r3.y == getHeight()) {
-					r3.y = 0;
-                	r3.x++;
+				r1.y++;
+				if (r1.y == getHeight()) {
+					r1.y = 0;
+                	r1.x++;
 				}
 			}else {
-				r3.y--;
-				if (r3.y == -1) {
-					r3.y = getHeight()-1;
-                	r3.x--;
+				r1.y--;
+				if (r1.y == -1) {
+					r1.y = getHeight()-1;
+                	r1.x--;
 				}
 			}
             
             // finished searching the whole grid
-            if ((dirT && r3.x == -1) || (!dirT && r3.x == getWidth())) {
+            if ((dirT && r1.x == -1) || (!dirT && r1.x == getWidth())) {
                 dirT = !dirT;
 				return;
             }
 			
 			//dropNewGarb(2);
 			
-            setAgPos(2, r3);
-            setAgPos(0, getAgPos(0)); // just to draw it in the view
+            setAgPos(0, r1);
+            setAgPos(2, getAgPos(2)); // just to draw it in the view
 			setAgPos(1, getAgPos(1)); // just to draw it in the view
 			setAgPos(3, getAgPos(3)); // just to draw it in the view
         }
@@ -358,7 +361,7 @@ public class MarsEnv extends Environment {
 		
 		void dropNewGarb(int ag) {
 			if(!model.hasObject(GARB,getAgPos(ag))){
-				if(random.nextDouble() < 0.1){
+				if(random.nextDouble() < 0.05){
 					add(GARB, getAgPos(2));
 				}
 			}
