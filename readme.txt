@@ -113,7 +113,9 @@ This new task will include several changes:
 	- the battery level will decharge everytime he moves withouth garbage
 	
 In "MarsEnv.jav	a":
-R4 agent is starting in a random location: setAgPos(3, getFreePos());
+-R4 agent is starting in a random location: setAgPos(3, getFreePos());
+-R1 agent now have a score that represents how is he doing his job. Everytime the agent picks garbage 10 points are added to the score and, if the agent fails picking garbage, 5 points are removed.
+This score is shown visually over the agent as text.
 
 "r4.asl" is empty by now.
 
