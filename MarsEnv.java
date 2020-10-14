@@ -336,6 +336,7 @@ public class MarsEnv extends Environment {
                     r1HasGarb = true;
 					this.r1Score +=10;
                 } else {
+					System.out.println("failed!");
                     nerr++;
 					this.r1Score -=5;
                 }
@@ -354,6 +355,7 @@ public class MarsEnv extends Environment {
                     remove(GARB, getAgPos(1));
                     berr = 0;
                 } else {
+					System.out.println("Failed while incinerating!");
                     berr++;
                 }       
             }
