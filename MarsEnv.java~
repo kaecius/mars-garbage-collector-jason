@@ -112,7 +112,6 @@ public class MarsEnv extends Environment {
         }
     }
 
-
     class MarsModel extends GridWorldModel {
 
         public static final int MErr = 2; // max error in pick garb
@@ -122,7 +121,7 @@ public class MarsEnv extends Environment {
         boolean r1HasGarb = false; // whether r1 is carrying garbage or not
 		boolean dir = true; //right direction
 		boolean dirT = false; // down direction
-		int r1Score = 0;
+		
         Random random = new Random(System.currentTimeMillis());
 
         private MarsModel() {
@@ -327,10 +326,8 @@ public class MarsEnv extends Environment {
                     remove(GARB, getAgPos(0));
                     nerr = 0;
                     r1HasGarb = true;
-					this.r1Score +=10;
                 } else {
                     nerr++;
-					this.r1Score -=5;
                 }
             }
         }
@@ -363,10 +360,9 @@ public class MarsEnv extends Environment {
 	
 
     class MarsView extends GridWorldView {
-		MarsModel model;
+
         public MarsView(MarsModel model) {
             super(model, "Mars World", 600);
-			this.model = model;
             defaultFont = new Font("Arial", Font.BOLD, 18); // change default font
             setVisible(true);
             repaint();
@@ -385,7 +381,6 @@ public class MarsEnv extends Environment {
         @Override
         public void drawAgent(Graphics g, int x, int y, Color c, int id) {
             String label = "R"+(id+1);
-			if(id == 0) label = ""+this.model.r1Score;
             c = Color.blue;
             if (id == 0) {
                 c = Color.yellow;
